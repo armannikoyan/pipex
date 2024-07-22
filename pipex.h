@@ -6,7 +6,7 @@
 /*   By: anikoyan <anikoyan@student.42yerevan.am>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 14:11:56 by anikoyan          #+#    #+#             */
-/*   Updated: 2024/07/22 01:00:39 by anikoyan         ###   ########.fr       */
+/*   Updated: 2024/07/22 11:01:48 by anikoyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@
 
 void	ft_free_data(char **data);
 
+char	*ft_path(char *cmd, char **envpath);
+
+char	**ft_envpath(char **envp);
 char	**ft_format_argv(int argc, char **argv);
 
 #endif

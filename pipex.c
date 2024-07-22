@@ -6,50 +6,13 @@
 /*   By: anikoyan <anikoyan@student.42yerevan.am>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 14:15:39 by anikoyan          #+#    #+#             */
-/*   Updated: 2024/07/22 10:29:47 by anikoyan         ###   ########.fr       */
+/*   Updated: 2024/07/22 11:06:02 by anikoyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char	**ft_envpath(char **envp)
-{
-	int		i;
-	char	**path;
-
-	i = 0;
-	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5))
-		i++;
-	if (!envp[i])
-		return (NULL);
-	path = ft_split(envp[i] + 5, ':');
-	return (path);
-}
-
-char	*ft_path(char *cmd, char **envpath)
-{
-	char	*line;
-	char	*tmp;
-	int		i;
-
-	i = 0;
-	while (envpath[i])
-	{
-		tmp = ft_strjoin("/", cmd);
-		line = ft_strjoin(envpath[i], tmp);
-		if (access(line, F_OK) == 0)
-		{
-			free(tmp);
-			return (line);
-		}
-		free(line);
-		free(tmp);
-		i++;
-	}
-	return (NULL);
-}
-
-void	ft_child_process(char **data, int *fd, char **envpath)
+static void	ft_child_process(char **data, int *fd, char **envpath)
 {
 	char	**envp;
 	char	**cmd;
@@ -67,7 +30,7 @@ void	ft_child_process(char **data, int *fd, char **envpath)
 		exit(EXIT_FAILURE);
 }
 
-void	ft_parent_process(char **data, int *fd, char **envpath, pid_t pid)
+static void	ft_parent_process(char **data, int *fd, char **envpath, pid_t pid)
 {
 	char	**envp;
 	char	**cmd;
