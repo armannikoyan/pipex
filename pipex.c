@@ -6,7 +6,7 @@
 /*   By: anikoyan <anikoyan@student.42yerevan.am>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 14:15:39 by anikoyan          #+#    #+#             */
-/*   Updated: 2024/07/22 12:59:41 by anikoyan         ###   ########.fr       */
+/*   Updated: 2024/07/22 13:04:38 by anikoyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,10 @@ int	main(int argc, char **argv, char **envp)
 	if (pid == -1)
 		return (EXIT_FAILURE);
 	if (pid == 0)
-		ft_parent_process(data, fd, envp);
-	else
-	{
 		ft_child_process(data, fd, envp);
-		waitpid(pid, NULL, 0); // ./pipex Makefile "sleep 5" "sleep 10" ss, doesnt work
-	}
+	else
+		ft_parent_process(data, fd, envp);
+	waitpid(pid, NULL, 0);
 	close(fd[0]);
 	close(fd[1]);
 	close(fd[2]);
