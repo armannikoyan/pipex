@@ -6,7 +6,7 @@
 /*   By: anikoyan <anikoyan@student.42yerevan.am>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 14:15:39 by anikoyan          #+#    #+#             */
-/*   Updated: 2024/07/22 11:06:02 by anikoyan         ###   ########.fr       */
+/*   Updated: 2024/07/22 12:59:41 by anikoyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,11 @@ static void	ft_child_process(char **data, int *fd, char **envpath)
 		exit(EXIT_FAILURE);
 }
 
-static void	ft_parent_process(char **data, int *fd, char **envpath, pid_t pid)
+static void	ft_parent_process(char **data, int *fd, char **envpath)
 {
 	char	**envp;
 	char	**cmd;
 
-	waitpid(pid, NULL, 0);
 	dup2(fd[3], STDOUT_FILENO);
 	close(fd[2]);
 	close(fd[3]);
@@ -66,9 +65,12 @@ int	main(int argc, char **argv, char **envp)
 	if (pid == -1)
 		return (EXIT_FAILURE);
 	if (pid == 0)
-		ft_child_process(data, fd, envp);
+		ft_parent_process(data, fd, envp);
 	else
-		ft_parent_process(data, fd, envp, pid);
+	{
+		ft_child_process(data, fd, envp);
+		waitpid(pid, NULL, 0); // ./pipex Makefile "sleep 5" "sleep 10" ss, doesnt work
+	}
 	close(fd[0]);
 	close(fd[1]);
 	close(fd[2]);
