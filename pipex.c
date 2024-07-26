@@ -6,7 +6,7 @@
 /*   By: anikoyan <anikoyan@student.42yerevan.am>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 14:15:39 by anikoyan          #+#    #+#             */
-/*   Updated: 2024/07/22 14:07:02 by anikoyan         ###   ########.fr       */
+/*   Updated: 2024/07/26 13:29:01 by anikoyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,14 @@ static void	ft_process_input(char *data, int *fd, int *fd_file, char **envpath)
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[1]);
 	cmd = ft_split(data, ' ');
+	if (!cmd)
+		exit(EXIT_FAILURE);
 	envp = ft_envpath(envpath);
-	cmd[0] = ft_path(cmd[0], envp);
+	if (!envp)
+		exit(EXIT_FAILURE);
+	cmd[0] = ft_command_path(cmd[0], envp);
+	if (!cmd[0])
+		exit(EXIT_FAILURE);
 	if (execve(cmd[0], cmd, envp) == -1)
 		exit(EXIT_FAILURE);
 	ft_free_data(cmd);
@@ -43,8 +49,14 @@ static void	ft_process_output(char *data, int *fd, int *fd_file, char **envpath)
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);
 	cmd = ft_split(data, ' ');
+	if (!cmd)
+		exit(EXIT_FAILURE);
 	envp = ft_envpath(envpath);
-	cmd[0] = ft_path(cmd[0], envp);
+	if (!envp)
+		exit(EXIT_FAILURE);
+	cmd[0] = ft_command_path(cmd[0], envp);
+	if (!cmd[0])
+		exit(EXIT_FAILURE);
 	if (execve(cmd[0], cmd, envp) == -1)
 		exit(EXIT_FAILURE);
 	ft_free_data(cmd);

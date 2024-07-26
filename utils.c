@@ -6,7 +6,7 @@
 /*   By: anikoyan <anikoyan@student.42yerevan.am>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:44:44 by anikoyan          #+#    #+#             */
-/*   Updated: 2024/07/22 11:01:04 by anikoyan         ###   ########.fr       */
+/*   Updated: 2024/07/26 13:34:46 by anikoyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@ char	**ft_format_argv(int argc, char **argv)
 	while (argv[i + 1])
 	{
 		data[i] = ft_strdup(argv[i + 1]);
+		if (!data[i])
+		{
+			ft_free_data(data);
+			return (NULL);
+		}
 		i++;
 	}
 	data[i] = NULL;
@@ -57,24 +62,27 @@ char	**ft_envpath(char **envp)
 	return (path);
 }
 
-char	*ft_path(char *cmd, char **envpath)
+char	*ft_command_path(char *cmd, char **envpath)
 {
 	char	*line;
 	char	*tmp;
 	int		i;
 
+	if (access(cmd, X_OK) == 0)
+		return (cmd);
 	i = 0;
 	while (envpath[i])
 	{
 		tmp = ft_strjoin("/", cmd);
+		if (!tmp)
+			return (NULL);
 		line = ft_strjoin(envpath[i], tmp);
-		if (access(line, F_OK) == 0)
-		{
-			free(tmp);
-			return (line);
-		}
-		free(line);
+		if (!line)
+			return (NULL);
 		free(tmp);
+		if (access(line, X_OK) == 0)
+			return (line);
+		free(line);
 		i++;
 	}
 	return (NULL);
